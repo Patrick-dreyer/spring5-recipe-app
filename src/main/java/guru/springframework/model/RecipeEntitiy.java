@@ -18,9 +18,8 @@ public class RecipeEntitiy {
     private String source;
     private String url;
     private String directions;
-
-    //Todo Diffivult Entity
-    private String difficulty;
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
     @Lob
     private Byte[] image;
 
@@ -29,6 +28,14 @@ public class RecipeEntitiy {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receipes")
     private List<IngredientEntity> ingredients;
+
+    @ManyToMany
+    @JoinTable(name = "recipe_category",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private List<CategoryEntity> categories;
+
+
 
     public Long getRecipeId() {
         return recipeId;
@@ -94,14 +101,6 @@ public class RecipeEntitiy {
         this.directions = directions;
     }
 
-    public String getDifficulty() {
-        return difficulty;
-    }
-
-    public void setDifficulty(String difficulty) {
-        this.difficulty = difficulty;
-    }
-
     public Byte[] getImage() {
         return image;
     }
@@ -124,5 +123,9 @@ public class RecipeEntitiy {
 
     public void setIngredients(List<IngredientEntity> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 }
